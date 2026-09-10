@@ -509,7 +509,7 @@ static int probe_http(const char *path, const char *host, bool post, size_t *byt
             }
             sscanf(prefix, "HTTP/%*d.%*d %d", &status);
             if (complete) {
-                if (!strcmp(path, "/")) *content_ok = strstr(prefix, "连接会议录音器") != NULL;
+                if (!strcmp(path, "/")) *content_ok = strstr(prefix, "连接AI通行证") != NULL;
                 else if (status == 302) *content_ok = strstr(prefix, "Location: http://192.168.4.1/") != NULL;
                 else *content_ok = true;
             }

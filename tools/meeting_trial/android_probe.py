@@ -44,7 +44,7 @@ def main():
         x1,y1,x2,y2=map(int,re.findall(r"\d+",node.get("bounds")))
         adb("shell","input","tap",str((x1+x2)//2),str((y1+y2)//2))
     else:
-        if not any(n.get("text")=="连接你的录音器" or n.get("text")=="设备已连接" for n in app_nodes):
+        if not any(n.get("text")=="连接你的AI通行证" or n.get("text")=="设备已连接" for n in app_nodes):
             raise RuntimeError("Only the non-sensitive device tab may be captured")
         output=Path(args.value); output.parent.mkdir(parents=True,exist_ok=True)
         output.write_bytes(adb("exec-out","screencap","-p")); print(output.resolve())

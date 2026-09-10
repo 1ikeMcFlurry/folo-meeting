@@ -5,11 +5,11 @@
 ## 获取源码
 
 ```powershell
-gh repo clone 1ikeMcFlurry/folo-meeting
+git clone https://github.com/1ikeMcFlurry/folo-meeting.git
 cd folo-meeting
 ```
 
-仓库为私有，需要先完成 GitHub 登录。源码仓库不包含设备配置、API 密钥、签名私钥、真实录音或用户编辑稿。
+仓库已公开，可以直接克隆。源码仓库不包含设备配置、API 密钥、签名私钥、真实录音或用户编辑稿。
 
 ## Android
 

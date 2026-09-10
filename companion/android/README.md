@@ -10,7 +10,7 @@
 | --- | --- |
 | 页面、设置与编辑 | `MainActivity`、`BrandActivity`、`BrandUi` |
 | 安全存储 | `Vault`，Android Keystore + 加密本地文件 |
-| 录音器连接 | `BleClient` |
+| AI通行证连接 | `BleClient` |
 | 乐鑫官方 BLE 配网 | `WifiProvisionActivity`、`WifiProvisionRules` |
 | 听悟调用 | `Tingwu`、`AcsSigner`、`CloudHttp` |
 | 声纹注册与恢复 | `VoiceprintActivity`、`Voiceprints`、`VoiceprintClient` |

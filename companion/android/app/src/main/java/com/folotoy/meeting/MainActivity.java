@@ -186,25 +186,25 @@ public class MainActivity extends BrandActivity {
     }
     private JSONObject cmd(String name) throws JSONException { return new JSONObject().put("cmd",name); }
     private void devicePage() {
-        heading(ble.connected()?"录音器已连接":"连接你的录音器");
-        if(!ble.connected()) note("长按录音器上键打开蓝牙，再搜索并连接。");
+        heading(ble.connected()?"AI通行证已连接":"连接你的AI通行证");
+        if(!ble.connected()) note("长按AI通行证上键打开蓝牙，再搜索并连接。");
         if(!ble.connected()) {
             button("搜索附近设备",this::scan,true);
             deviceList=new LinearLayout(this); deviceList.setOrientation(LinearLayout.VERTICAL); content.addView(deviceList);
             found.clear();
         } else {
             note(device.optBoolean("wifi")?"设备 Wi-Fi 已连接":"设备尚未连上 Wi-Fi");
-            note(device.optBoolean("configured")?"听悟服务已配置":"前往「设置 → 听悟服务」填写账号，再发送给录音器。");
+            note(device.optBoolean("configured")?"听悟服务已配置":"前往「设置 → 听悟服务」填写账号，再发送给AI通行证。");
             note(device.optBoolean("audio_output_supported")?(device.optBoolean("audio_output_enabled")?"会后识别用音频已开启 · 之后的新会议可取样":"会后识别用音频未开启 · 可在录音偏好设置"):"当前固件未提供会后识别用音频开关");
             button("同步会议记录",()->task("正在同步会议记录…",()-> { syncRecords(); return "同步完成，可在「记录」查看纪要"; },true),true);
             button("配置 Wi-Fi",this::wifiDialog,false);
-            button("发送设置给录音器",()->task("正在保存设备设置…",()-> { configureDevice(); return "录音器已保存设置"; },true),false);
+            button("发送设置给AI通行证",()->task("正在保存设备设置…",()-> { configureDevice(); return "AI通行证已保存设置"; },true),false);
             button("开始录音",()->new AlertDialog.Builder(this).setTitle("开始会议录音")
                 .setMessage("设备将通过 Wi-Fi 上传音频到你配置的听悟账号。录音期间蓝牙会断开，按设备确定键结束录音。")
-                .setNegativeButton("取消",null).setPositiveButton("开始",(d,w)->task("正在启动录音…",()->{ble.command(cmd("start")); return "开始指令已发送，请查看录音器屏幕";},true)).show(),false);
+                .setNegativeButton("取消",null).setPositiveButton("开始",(d,w)->task("正在启动录音…",()->{ble.command(cmd("start")); return "开始指令已发送，请查看AI通行证屏幕";},true)).show(),false);
         }
         line(); heading("录完再整理");
-        note("按录音器确定键开始或结束录音。上传结束后，连接手机同步纪要，再到「记录」查看、编辑和发布。");
+        note("按AI通行证确定键开始或结束录音。上传结束后，连接手机同步纪要，再到「记录」查看、编辑和发布。");
         note("设备与手机均不保存录音文件。开启会后声纹识别用音频后，听悟会生成云端录音供手机取样。手机保存会议文字和编辑稿。");
         button("声纹管理",this::openVoiceprints,false);
     }
@@ -223,7 +223,7 @@ public class MainActivity extends BrandActivity {
                 if(Build.VERSION.SDK_INT>=31 && checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT)!=PackageManager.PERMISSION_GRANTED) return;
                 if(!tab.equals("设备") || editing || deviceList==null || found.containsKey(d.getAddress())) return;
                 found.put(d.getAddress(),d); Button b=new Button(this);
-                b.setText(d.getName()==null?"FoloToy 录音器":d.getName()); BrandUi.button(this,b,false); deviceList.addView(b,new LinearLayout.LayoutParams(-1,-2));
+                b.setText(d.getName()==null?"FoloToy AI通行证":d.getName()); BrandUi.button(this,b,false); deviceList.addView(b,new LinearLayout.LayoutParams(-1,-2));
                 b.setOnClickListener(v->task("连接中；首次配对请在系统提示中输入设备屏幕上的配对码…",()-> {
                     ble.connect(d); syncRecords(); return "连接完成";
                 },true));
@@ -233,7 +233,7 @@ public class MainActivity extends BrandActivity {
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results) {
         super.onRequestPermissionsResult(request,permissions,results);
         if(request==10 && results.length>0 && Arrays.stream(results).allMatch(v->v==PackageManager.PERMISSION_GRANTED)) scan();
-        else notice.setText("需要允许附近设备权限才能配置录音器");
+        else notice.setText("需要允许附近设备权限才能配置AI通行证");
     }
     private void wifiDialog() {
         provisionReturnDevice=ble.connectedDevice();
@@ -277,7 +277,7 @@ public class MainActivity extends BrandActivity {
         if(minutes<1 || minutes>1440) throw new IllegalArgumentException("录音上限应为 1 至 1440 分钟");
         config.put("max_seconds",minutes*60).put("audio_output_enabled",settings.optBoolean("audio_output_enabled"));
         if(settings.optBoolean("audio_output_enabled") && !device.optBoolean("audio_output_supported"))
-            throw new IllegalStateException("请先更新录音器固件，再开启会后识别用音频");
+            throw new IllegalStateException("请先更新AI通行证固件，再开启会后识别用音频");
         ble.command(cmd("configure").put("settings",config));
         device=ble.command(cmd("status"));
         if(device.optBoolean("audio_output_supported") && device.optBoolean("audio_output_enabled")!=settings.optBoolean("audio_output_enabled"))
@@ -326,7 +326,7 @@ public class MainActivity extends BrandActivity {
         note("原稿与编辑稿分别保存。云端更新不会覆盖你修改的文字。");
         List<String> ids=new ArrayList<>(); index.keys().forEachRemaining(ids::add);
         ids.sort((a,b)->Long.compare(index.optJSONObject(b).optLong("created_at"),index.optJSONObject(a).optLong("created_at")));
-        if(ids.isEmpty()) { heading("还没有会议记录"); note("结束录音后，在「设备」连接录音器并点击「同步会议记录」。"); }
+        if(ids.isEmpty()) { heading("还没有会议记录"); note("结束录音后，在「设备」连接AI通行证并点击「同步会议记录」。"); }
         for(String id:ids) {
             JSONObject record=index.optJSONObject(id); String title=record.optString("title","会议纪要");
             button(title,()->openRecord(id),false);
@@ -505,7 +505,7 @@ public class MainActivity extends BrandActivity {
     }
     private void settingsPage() {
         if(settingsSection.isEmpty()) {
-            note("按需要配置服务，连接录音器后发送设置即可生效。");
+            note("按需要配置服务，连接AI通行证后发送设置即可生效。");
             button("听悟服务  ›",()->openSettings("听悟服务"),false); note("语音转写、发言人分离与 AI 纪要");
             button("录音偏好  ›",()->openSettings("录音偏好"),false); note("默认标题、录音时长与发布方式");
             button("飞书连接  ›",()->openSettings("飞书连接"),false); note("授权账号，将纪要保存为飞书文档");
@@ -523,14 +523,14 @@ public class MainActivity extends BrandActivity {
             note("可设为 1–1440 分钟。实际录音时长还取决于设备电量和网络；长时间录音仍在验证中。");
             content.addView(text("纪要发布方式",14,MUTED,true)); space(8);
             exportMode=new Spinner(this); exportMode.setContentDescription("纪要发布方式"); exportMode.setMinimumHeight(dp(52));
-            exportMode.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"手机确认后发布","录音器自动保存到飞书"}));
+            exportMode.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"手机确认后发布","AI通行证自动保存到飞书"}));
             exportMode.setSelection(settings.optString("export_mode").equals("auto")?1:0); content.addView(exportMode); space(16);
-            note("自动保存需要先在「飞书连接」中授权录音器。");
+            note("自动保存需要先在「飞书连接」中授权AI通行证。");
             line();
             audioOutput=new CheckBox(this); audioOutput.setText("会后声纹识别用音频"); audioOutput.setTextColor(INK); audioOutput.setTextSize(16); audioOutput.setMinHeight(dp(52));
             audioOutput.setButtonTintList(android.content.res.ColorStateList.valueOf(BrandUi.PRIMARY));
             audioOutput.setChecked(settings.optBoolean("audio_output_enabled")); content.addView(audioOutput);
-            note("默认关闭。开启并发送给录音器后，新会议会在听悟生成 MP3，供手机提取发言片段；声纹识别仍需你在会议编辑页点击启动。");
+            note("默认关闭。开启并发送给AI通行证后，新会议会在听悟生成 MP3，供手机提取发言片段；声纹识别仍需你在会议编辑页点击启动。");
             note("听悟云端录音的保留期限需向阿里云确认。当前公开 API 没有录音删除接口，App 无法代删；关闭开关只影响新会议，不会删除已有云端录音。手机取样完成或取消后清空音频内存。");
             note("云端音频输出和声纹查询可能消耗试用或付费额度，以听悟、讯飞控制台为准。选择手机确认后发布，便于先核对发言人姓名。");
         } else if(settingsSection.equals("飞书连接")) {
@@ -540,16 +540,16 @@ public class MainActivity extends BrandActivity {
                     grant.optString("refresh_token").isBlank()?"手机已授权，到期后需重新登录":"手机已授权飞书");
             } catch(Exception e) { note("无法读取手机授权，请重试"); }
             field("飞书应用 App ID","feishu_app_id",false,""); field("飞书应用 App Secret","feishu_app_secret",true,""); field("目标文件夹 Token（可选）","folder_token",false,"");
-            note("使用飞书自建应用，需开通文档和云空间权限。手机与录音器分别授权。");
+            note("使用飞书自建应用，需开通文档和云空间权限。手机与AI通行证分别授权。");
         }
         button("保存设置",()->saveSettings(),true);
         if(settingsSection.equals("飞书连接")) {
             button("授权手机访问飞书",()->authorize(false),false);
-            button("授权录音器自动保存",()->authorize(true),false);
+            button("授权AI通行证自动保存",()->authorize(true),false);
         }
-        button("保存并发送给录音器",()-> {
-            if(!ble.connected()) { notice.setText("请先保存设置，再到「设备」连接录音器"); return; }
-            if(saveSettings()) task("正在发送设置…",()-> { configureDevice(); return "录音器已保存设置"; },true);
+        button("保存并发送给AI通行证",()-> {
+            if(!ble.connected()) { notice.setText("请先保存设置，再到「设备」连接AI通行证"); return; }
+            if(saveSettings()) task("正在发送设置…",()-> { configureDevice(); return "AI通行证已保存设置"; },true);
         },false);
         captureSettingsBaseline();
     }
@@ -562,7 +562,7 @@ public class MainActivity extends BrandActivity {
             int minutes=Integer.parseInt(next.optString("max_minutes","120"));
             if(minutes<1 || minutes>1440) throw new IllegalArgumentException("时长应为 1 至 1440 分钟");
             if(!next.optString("feishu_app_id").equals(settings.optString("feishu_app_id"))) vault.save("feishu_phone",new JSONObject());
-            vault.save("settings",next); settings=next; captureSettingsBaseline(); notice.setText("设置已保存到手机，可发送给录音器生效"); return true;
+            vault.save("settings",next); settings=next; captureSettingsBaseline(); notice.setText("设置已保存到手机，可发送给AI通行证生效"); return true;
         } catch(Exception e) { notice.setText(safeError(e)); return false; }
     }
     private void authorize(boolean hardware) {

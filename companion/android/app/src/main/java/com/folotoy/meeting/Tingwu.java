@@ -35,13 +35,13 @@ final class Tingwu {
     static String audioUrl(JSONObject task) throws Exception {
         requireComplete(task);
         String url=task.optString("OutputMp3Path");
-        if(url.isBlank()) throw new IOException("本场没有可用录音。请开启「会后声纹识别用音频」，发送给录音器后重新录一场；旧会议不能补录音");
+        if(url.isBlank()) throw new IOException("本场没有可用录音。请开启「会后声纹识别用音频」，发送给AI通行证后重新录一场；旧会议不能补录音");
         return resultUrl(url);
     }
     private static void requireComplete(JSONObject task) throws IOException {
         String state=task.optString("TaskStatus");
         if("FAILED".equals(state) || "INVALID".equals(state)) throw new IOException("本场云端处理失败或任务无效，无法识别发言人；请重新录制");
-        if("PAUSED".equals(state)) throw new IOException("本场录音已暂停或中断，听悟尚未生成最终结果；请检查录音器状态");
+        if("PAUSED".equals(state)) throw new IOException("本场录音已暂停或中断，听悟尚未生成最终结果；请检查AI通行证状态");
         if(!"COMPLETED".equals(state)) throw new IOException("纪要尚未完成，稍后点击获取结果");
     }
     static String resultUrl(String url) throws Exception {

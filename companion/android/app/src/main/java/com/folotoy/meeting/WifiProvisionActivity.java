@@ -53,8 +53,8 @@ public class WifiProvisionActivity extends BrandActivity {
         device=new ESPDevice(getApplicationContext(),ESPConstants.TransportType.TRANSPORT_BLE,ESPConstants.SecurityType.SECURITY_1);
         device.setProofOfPossession(pop);
         EventBus.getDefault().register(this);
-        progress(1,"正在连接录音器","请让手机靠近录音器，保持蓝牙开启。");
-        final int token=arm(35000,"连接设备超时。请靠近录音器，并重新开始配网。");
+        progress(1,"正在连接AI通行证","请让手机靠近AI通行证，保持蓝牙开启。");
+        final int token=arm(35000,"连接设备超时。请靠近AI通行证，并重新开始配网。");
         main.postDelayed(()-> {
             if(!current(token)) return;
             try {
@@ -139,7 +139,7 @@ public class WifiProvisionActivity extends BrandActivity {
                 JSONObject info=new JSONObject(device.getVersionInfo()).getJSONObject("prov");
                 if(info.optInt("sec_ver",-1)!=1 || device.getDeviceCapabilities().contains("no_pop"))
                     throw new IllegalStateException();
-                progress(1,"正在验证录音器","正在建立安全连接，请稍候。");
+                progress(1,"正在验证AI通行证","正在建立安全连接，请稍候。");
                 int token=arm(20000,"设备安全验证超时，请重新开始配网。");
                 device.initSession(new ResponseListener() {
                     public void onSuccess(byte[] data) { ui(token,()-> { secure=true; scan(); }); }
@@ -147,12 +147,12 @@ public class WifiProvisionActivity extends BrandActivity {
                 });
             } catch(Exception ignored) { fatal("设备配网版本或安全验证不匹配，请更新固件后重试。"); }
         } else if(event.getEventType()==ESPConstants.EVENT_DEVICE_CONNECTION_FAILED || event.getEventType()==ESPConstants.EVENT_DEVICE_DISCONNECTED) {
-            fatal("蓝牙连接已断开，设备会恢复上次保存的网络。请靠近录音器后重新开始。");
+            fatal("蓝牙连接已断开，设备会恢复上次保存的网络。请靠近AI通行证后重新开始。");
         }
     }
     private void scan() {
         if(ending || !secure) return;
-        progress(1,"正在搜索附近 Wi-Fi","录音器仅支持 2.4 GHz 网络，请靠近路由器。");
+        progress(1,"正在搜索附近 Wi-Fi","AI通行证仅支持 2.4 GHz 网络，请靠近路由器。");
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
         int token=arm(35000,"搜索网络超时，请重新开始配网。");
         device.scanNetworks(new WiFiScanListener() {
@@ -163,7 +163,7 @@ public class WifiProvisionActivity extends BrandActivity {
         });
     }
     private void showNetworks() {
-        hideKeyboard(); setPage(Page.NETWORKS); page(1,"选择录音器要连接的 Wi-Fi"); working=false;
+        hideKeyboard(); setPage(Page.NETWORKS); page(1,"选择AI通行证要连接的 Wi-Fi"); working=false;
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
         note(deviceName+" · 仅支持 2.4 GHz 网络");
         List<WiFiAccessPoint> ordered=new ArrayList<>(networks);
@@ -208,7 +208,7 @@ public class WifiProvisionActivity extends BrandActivity {
         open.setOnCheckedChangeListener((b,checked)-> { if(password!=null) {
             password.getText().clear(); password.setVisibility(checked?View.GONE:View.VISIBLE); show.setVisibility(checked?View.GONE:View.VISIBLE);
         }});
-        note(auth==0?"开放网络没有 Wi-Fi 密码，请确认这是你要连接的网络。":"密码通过加密蓝牙发送给录音器。只有联网验证成功后，设备才会确认保存。");
+        note(auth==0?"开放网络没有 Wi-Fi 密码，请确认这是你要连接的网络。":"密码通过加密蓝牙发送给AI通行证。只有联网验证成功后，设备才会确认保存。");
         body.addView(button("连接这个网络",()-> {
             String network=manual?ssid.getText().toString():name;
             String pass=open.isChecked()?"":password.getText().toString();
@@ -221,19 +221,19 @@ public class WifiProvisionActivity extends BrandActivity {
         body.addView(button("选择其他网络",this::showNetworks,false));
     }
     private void provision(String ssid,String pass) {
-        progress(3,"正在发送 Wi-Fi 设置","正在将网络名称和密码安全发送给录音器。");
+        progress(3,"正在发送 Wi-Fi 设置","正在将网络名称和密码安全发送给AI通行证。");
         int token=arm(75000,"连接 Wi-Fi 超时。请检查密码和路由器网络设置，再重试。");
         Runnable send=()->device.provision(ssid,pass,new ProvisionListener() {
             public void createSessionFailed(Exception e) { ui(token,()->fatal("安全会话已失效，请重新开始配网。")); }
-            public void wifiConfigSent() { ui(token,()->status.setText("网络配置已送达录音器")); }
+            public void wifiConfigSent() { ui(token,()->status.setText("网络配置已送达AI通行证")); }
             public void wifiConfigFailed(Exception e) { ui(token,()->fatal("发送网络配置失败，请重新开始配网。")); }
-            public void wifiConfigApplied() { ui(token,()->progress(3,"正在连接 Wi-Fi","录音器正在连接路由器，请稍候。")); }
+            public void wifiConfigApplied() { ui(token,()->progress(3,"正在连接 Wi-Fi","AI通行证正在连接路由器，请稍候。")); }
             public void wifiConfigApplyFailed(Exception e) { ui(token,()->fatal("设备未能应用网络配置，请重新开始配网。")); }
             public void provisioningFailedFromDevice(ESPConstants.ProvisionFailureReason reason) { ui(token,()-> {
                 disarm(); working=false; needsReset=true;
                 setPage(Page.FAILURE); page(3,"连接未完成");
                 note(reason==ESPConstants.ProvisionFailureReason.AUTH_FAILED?"Wi-Fi 密码错误，请重新输入。":
-                     reason==ESPConstants.ProvisionFailureReason.NETWORK_NOT_FOUND?"录音器找不到这个网络。请检查 2.4 GHz Wi-Fi 是否开启，并靠近路由器。":"设备连接失败，请检查信号和路由器设置。");
+                     reason==ESPConstants.ProvisionFailureReason.NETWORK_NOT_FOUND?"AI通行证找不到这个网络。请检查 2.4 GHz Wi-Fi 是否开启，并靠近路由器。":"设备连接失败，请检查信号和路由器设置。");
                 note("上次确认过的网络配置仍然保留。");
                 String retry=reason==ESPConstants.ProvisionFailureReason.AUTH_FAILED?"修改密码后重试":"检查网络后重试";
                 body.addView(button(retry,()->form(selected,selectedSecurity,false),true));
@@ -250,7 +250,7 @@ public class WifiProvisionActivity extends BrandActivity {
         } else send.run();
     }
     private void commit() {
-        progress(3,"Wi-Fi 已连接，正在保存","正在确认录音器已保存设置，请稍候。");
+        progress(3,"Wi-Fi 已连接，正在保存","正在确认AI通行证已保存设置，请稍候。");
         int token=arm(12000,"保存结果未能确认。请返回设备页重新连接，检查设备 Wi-Fi 状态。");
         device.sendDataToCustomEndPoint("folo-finish","commit".getBytes(StandardCharsets.UTF_8),new ResponseListener() {
             public void onSuccess(byte[] bytes) { ui(token,()-> {
@@ -261,7 +261,7 @@ public class WifiProvisionActivity extends BrandActivity {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
                 setPage(Page.SUCCESS); page(4,"Wi-Fi 已连接并保存");
                 body.addView(label("✓  连接完成",25,0xff147d60,true));
-                note(selected); note("设置已保存，下次开机会自动连接。返回后，App 会重新连接录音器。");
+                note(selected); note("设置已保存，下次开机会自动连接。返回后，App 会重新连接AI通行证。");
                 body.addView(button("完成，返回设备",WifiProvisionActivity.this::leave,true));
                 close.setVisibility(View.GONE);
                 device.disconnectDevice();
@@ -276,7 +276,7 @@ public class WifiProvisionActivity extends BrandActivity {
         // Disconnect triggers the device's bounded cancellation and restoration.
         if(device!=null) { ESPDevice old=device; device=null; old.disconnectDevice(); }
         setPage(Page.ERROR); page(currentStep,"配网未完成"); note(message);
-        note("录音器会恢复上次确认过的网络。也可以长按设备上键退出配网。");
+        note("AI通行证会恢复上次确认过的网络。也可以长按设备上键退出配网。");
         body.addView(button("返回设备，重新开始",this::leave,true));
     }
     private void leave() {
@@ -300,7 +300,7 @@ public class WifiProvisionActivity extends BrandActivity {
         if(!working || committed) { leave(); return; }
         if(exitDialog!=null && exitDialog.isShowing()) return;
         exitDialog=new AlertDialog.Builder(this).setTitle("退出本次配网？")
-            .setMessage("配网尚未完成。退出后，录音器会恢复上次保存的网络。")
+            .setMessage("配网尚未完成。退出后，AI通行证会恢复上次保存的网络。")
             .setNegativeButton("继续配网",null).setPositiveButton("退出配网",(d,w)->leave()).create();
         exitDialog.show();
     }

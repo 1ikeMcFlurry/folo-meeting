@@ -1,15 +1,15 @@
 # 安装与固件升级
 
-适用版本：Folo Meeting v0.1.0 试用版。请从同一条 Release 下载 APK 与固件。
+适用版本：Folo Meeting v0.1.1 试用版。请从同一条 Release 下载 APK 与固件。
 
 ## 1. 下载与校验
 
-本仓库为私有仓库，下载需要拥有仓库访问权限。可以在 [Releases](https://github.com/1ikeMcFlurry/folo-meeting/releases) 页面下载，也可使用已登录的 GitHub CLI：
+本仓库已公开，可以直接在 [Releases](https://github.com/1ikeMcFlurry/folo-meeting/releases) 页面下载，也可使用已配置的 GitHub CLI：
 
 ```powershell
-gh release download v0.1.0 --repo 1ikeMcFlurry/folo-meeting --dir release-v0.1.0
-Get-FileHash release-v0.1.0/folo-meeting-v0.1.0-android.apk -Algorithm SHA256
-Get-FileHash release-v0.1.0/folo-meeting-v0.1.0-esp32c3-app.bin -Algorithm SHA256
+gh release download v0.1.1 --repo 1ikeMcFlurry/folo-meeting --dir release-v0.1.1
+Get-FileHash release-v0.1.1/folo-meeting-v0.1.1-android.apk -Algorithm SHA256
+Get-FileHash release-v0.1.1/folo-meeting-v0.1.1-esp32c3-app.bin -Algorithm SHA256
 ```
 
 将输出与下载的 `SHA256SUMS.txt` 比较。版本与源码提交可在 `release-manifest.json` 中核对。
@@ -20,7 +20,7 @@ Get-FileHash release-v0.1.0/folo-meeting-v0.1.0-esp32c3-app.bin -Algorithm SHA25
 
 ```powershell
 adb devices
-adb install --no-streaming -r release-v0.1.0/folo-meeting-v0.1.0-android.apk
+adb install --no-streaming -r release-v0.1.1/folo-meeting-v0.1.1-android.apk
 ```
 
 多台手机连接时在 `adb` 后添加 `-s <设备序列号>`。`-r` 用于覆盖安装并保留数据，前提是包名和签名一致。当前包名为 `com.folotoy.meeting`。
@@ -57,7 +57,7 @@ py -m venv .venv
 确认显示 8 MB，且设备现有分区布局符合上表，再升级：
 
 ```powershell
-.venv/Scripts/python.exe -m esptool --chip esp32c3 --port COM3 --baud 460800 write_flash --flash_size detect 0x10000 release-v0.1.0/folo-meeting-v0.1.0-esp32c3-app.bin
+.venv/Scripts/python.exe -m esptool --chip esp32c3 --port COM3 --baud 460800 write_flash --flash_size detect 0x10000 release-v0.1.1/folo-meeting-v0.1.1-esp32c3-app.bin
 ```
 
 该命令只写应用范围，不写 NVS、`cardid`、bootloader 或分区表。应用镜像必须小于等于 `0x300000` 字节。不要使用 `erase_flash` / `erase-flash`；`cardid` 内有设备身份，不能用公共 Release 文件恢复。
