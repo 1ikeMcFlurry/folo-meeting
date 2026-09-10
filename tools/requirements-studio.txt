@@ -1,0 +1,13 @@
+# TRAE-CARD 工具箱(tools/trae_studio.py)依赖
+#   pip install -r tools/requirements-studio.txt
+# tkinter 为标准库(Windows/macOS 官方 Python 自带;Linux: sudo apt install python3-tk)。
+# 各面板依赖按需惰性导入,缺某项只影响对应面板,应用仍可启动。
+pyserial>=3.5        # 产测 / 身份烧录(串口)
+librosa>=0.10        # 音频 → RTTTL
+soundfile            # 音频后端(librosa/wav_to_adpcm)
+numpy                # 音频处理
+pillow>=9            # 中文点阵字体生成 / 头像
+# 可选(音频 mp3 后端二选一,免装 ffmpeg):
+miniaudio            # wav_to_adpcm 的 mp3 后端首选
+# 可选(BLE 面板,须有蓝牙电台):
+bleak>=0.21          # ble_card_client / avatar_export

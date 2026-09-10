@@ -1,0 +1,13 @@
+* text=auto
+*.md text eol=lf
+*.py text eol=lf
+*.java text eol=lf
+*.c text eol=lf
+*.h text eol=lf
+*.svg text eol=lf
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.mp3 binary
+*.jar binary

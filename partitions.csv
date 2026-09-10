@@ -1,0 +1,9 @@
+# Name,   Type, SubType, Offset,  Size
+nvs,      data, nvs,     ,        0x6000,
+phy_init, data, phy,     ,        0x1000,
+factory,  app,  factory, ,        0x300000,
+imgstore, data, spiffs,  ,        0x20000,
+imgframe, data, spiffs,  ,        0x26000,
+cardid,   data, nvs,     ,        0x4000,
+audio,    data, spiffs,  0x37a000,0x80000,
+imgava,   data, spiffs,  ,        0x100000,

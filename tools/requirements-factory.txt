@@ -1,0 +1,5 @@
+# 产线功能测试工具依赖(tools/factory_test.py 命令行 / tools/factory_gui.py 治具 GUI)
+#   pip install -r tools/requirements-factory.txt
+# GUI 用标准库 tkinter,无需额外安装(Windows/macOS 的官方 Python 自带;
+# Linux 若缺失: sudo apt install python3-tk)。
+pyserial>=3.5        # USB-Serial-JTAG 串口(AT+TEST 指令通道)

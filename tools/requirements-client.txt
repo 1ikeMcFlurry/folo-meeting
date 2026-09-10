@@ -1,0 +1,4 @@
+# trae_card BLE 上位机(GATT 客户端) 依赖
+# 安装: pip install -r requirements-client.txt
+bleak>=0.21          # 跨平台 BLE 中心(连接/写特征/notify);Windows 用 WinRT 后端
+pillow>=9            # 图片解码 + 转 JPG

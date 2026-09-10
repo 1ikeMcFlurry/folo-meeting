@@ -1,0 +1,15 @@
+CONFIG_FOLO_MEETING_TRIAL=y
+# The small status screen shares the system allocator instead of reserving a
+# 48 KiB LVGL-only pool while Wi-Fi/TLS needs working memory. Normal badge
+# builds retain their existing allocator and pool settings.
+CONFIG_LV_USE_BUILTIN_MALLOC=n
+CONFIG_LV_USE_CLIB_MALLOC=y
+# Upload must not wait behind incoming transcript reads on a shared WS lock.
+CONFIG_ESP_WS_CLIENT_SEPARATE_TX_LOCK=y
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+CONFIG_ESP_WIFI_STATIC_RX_BUFFER_NUM=6
+CONFIG_ESP_WIFI_DYNAMIC_RX_BUFFER_NUM=12
+CONFIG_ESP_WIFI_DYNAMIC_TX_BUFFER_NUM=12
+CONFIG_ESP_WIFI_NVS_ENABLED=n

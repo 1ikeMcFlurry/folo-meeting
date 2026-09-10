@@ -1,0 +1,11 @@
+*.wav
+*.pcm
+*.mp3
+*.json
+!tingwu-ram-policy.json
+*.json.tmp
+.env
+auth-*.png
+__pycache__/
+exports/
+backups/

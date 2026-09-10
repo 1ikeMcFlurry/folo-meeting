@@ -1,0 +1,12 @@
+# TRAE-CARD BLE 广播发送器(tools/ble_advertiser_gui.py)的 Windows 依赖。
+# 仅在 Windows 原生 Python 下安装/运行(WSL2 访问不到蓝牙电台)。
+#   py -m pip install -r tools/requirements-win.txt
+# GUI 用标准库 tkinter,无需额外安装。
+winrt-runtime
+winrt-Windows.Foundation
+winrt-Windows.Storage.Streams
+winrt-Windows.Devices.Bluetooth
+winrt-Windows.Devices.Bluetooth.Advertisement
+
+# tools/token_broadcast_gui.py(token 广播发送器)用同一套依赖。
+# 该工具的 --selftest / --frame 两个模式不需要蓝牙,在 WSL/Linux 下也能跑。

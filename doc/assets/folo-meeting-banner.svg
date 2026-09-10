@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">FoloToy Meeting</title>
+  <desc id="desc">ESP32-C3 recorder and Android companion app. Record, understand, confirm speakers and publish meeting notes.</desc>
+  <defs>
+    <linearGradient id="background" x2="1" y2="1"><stop stop-color="#fff7fb"/><stop offset="1" stop-color="#fce7f0"/></linearGradient>
+    <linearGradient id="device" x2="1" y2="1"><stop stop-color="#443044"/><stop offset="1" stop-color="#241b28"/></linearGradient>
+  </defs>
+  <rect width="1200" height="360" rx="28" fill="url(#background)"/>
+  <circle cx="1060" cy="66" r="218" fill="#fff" opacity=".45"/>
+  <g font-family="Arial, Noto Sans CJK SC, Microsoft YaHei, sans-serif">
+    <rect x="54" y="45" width="166" height="30" rx="15" fill="#db2777"/>
+    <text x="137" y="65" fill="#fff" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="2">FOLOTOY LAB</text>
+    <text x="52" y="148" fill="#302331" font-size="64" font-weight="800" letter-spacing="-2">Folo Meeting</text>
+    <text x="55" y="194" fill="#756674" font-size="23">把对话，整理成可行动的纪要。</text>
+    <text x="55" y="249" fill="#a9215a" font-size="16" font-weight="700">录音 · 转写 · 发言人确认 · 纪要归档</text>
+    <text x="55" y="304" fill="#756674" font-size="13" letter-spacing="1">ESP32-C3  /  ANDROID  /  TINGWU  /  XFYUN  /  FEISHU</text>
+    <path d="M826 155 H922" stroke="#db2777" stroke-width="2" stroke-dasharray="5 7" opacity=".5"/>
+    <rect x="715" y="79" width="142" height="211" rx="24" fill="url(#device)"/>
+    <rect x="754" y="67" width="64" height="13" rx="6" fill="#5d465c"/>
+    <rect x="729" y="100" width="114" height="142" rx="13" fill="#fdf8fa"/>
+    <circle cx="746" cy="119" r="4" fill="#db2777"/>
+    <text x="758" y="123" font-size="10" fill="#756674">RECORDING</text>
+    <text x="786" y="159" text-anchor="middle" font-size="24" font-weight="700" fill="#302331">12:34</text>
+    <path d="M744 199v-6m9 15v-24m9 34v-44m9 30v-16m9 39v-61m9 42v-23m9 32v-43m9 27v-14m9 22v-30m9 20v-10" stroke="#db2777" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="756" cy="265" r="4" fill="#96768e"/><circle cx="786" cy="265" r="9" fill="#db2777"/><circle cx="816" cy="265" r="4" fill="#96768e"/>
+    <rect x="914" y="56" width="216" height="250" rx="20" fill="#fff" stroke="#e8dbe2"/>
+    <text x="936" y="89" font-size="15" font-weight="700" fill="#302331">会议纪要</text>
+    <rect x="936" y="103" width="68" height="5" rx="2.5" fill="#db2777"/>
+    <text x="936" y="140" font-size="11" font-weight="700" fill="#756674">KEY TAKEAWAYS</text>
+    <path d="M936 158h167m-167 13h141m-141 13h153" stroke="#e8dbe2" stroke-width="5" stroke-linecap="round"/>
+    <rect x="936" y="205" width="171" height="35" rx="8" fill="#fce7f0"/>
+    <text x="1021" y="227" text-anchor="middle" font-size="12" fill="#a9215a">发言人编号 → 确认姓名</text>
+    <rect x="936" y="257" width="171" height="28" rx="7" fill="#db2777"/>
+    <text x="1021" y="275" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">PUBLISH TO FEISHU</text>
+  </g>
+</svg>

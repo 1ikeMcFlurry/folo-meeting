@@ -1,0 +1,6 @@
+<resources>
+    <!-- Primary and pressed colors used by folotoy.com. -->
+    <color name="brand_primary">#DB2777</color>
+    <color name="brand_pressed">#C5236B</color>
+    <color name="brand_background">#FDF8FA</color>
+</resources>

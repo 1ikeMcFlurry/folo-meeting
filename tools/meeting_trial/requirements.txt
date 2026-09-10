@@ -1,0 +1,5 @@
+aiohttp>=3.12,<4
+pyserial>=3.5,<4
+esptool>=4.11,<5
+aliyun-python-sdk-core==2.16.1
+nls @ https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20240723/ibxkbv/nls-1.1.0-py3-none-any.whl

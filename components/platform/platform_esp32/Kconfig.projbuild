@@ -1,0 +1,16 @@
+menu "Folo meeting trial"
+config FOLO_MEETING_TRIAL
+    bool "Boot into the USB-controlled Wi-Fi meeting experiment"
+    default n
+    help
+        Uses the ES8311 microphone and direct TLS WebSocket streaming.
+        Does not start the normal display, BLE, or audio storage services.
+        Wi-Fi configuration and the signed meeting URL stay in RAM.
+config FOLO_MEETING_COMPANION
+    bool "Independent meeting recorder with Android BLE companion"
+    depends on FOLO_MEETING_TRIAL
+    default n
+    help
+        Uses user-provided cloud credentials, hardware recording controls and
+        authenticated BLE configuration before and after streaming.
+endmenu

@@ -1,0 +1,25 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    <application android:label="FoloToy 会议" android:theme="@style/AppTheme" android:icon="@drawable/ic_meeting"
+        android:enableOnBackInvokedCallback="true"
+        android:allowBackup="false" android:usesCleartextTraffic="false" android:supportsRtl="true">
+        <activity android:name=".WifiProvisionActivity" android:exported="false"
+            android:configChanges="orientation|screenSize" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".VoiceprintActivity" android:exported="false" android:configChanges="orientation|screenSize" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".MeetingSpeakerActivity" android:exported="false" android:configChanges="orientation|screenSize" />
+        <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize" android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
